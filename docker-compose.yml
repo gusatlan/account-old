@@ -1,0 +1,44 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=account
+    volumes:
+      - "account_old_data:/var/lib/postgresql/data"
+    networks:
+      - account-old-network
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8083:80"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - PGADMIN_DEFAULT_EMAIL=user@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=useruser
+    networks:
+      - account-old-network
+    depends_on:
+      - db
+  app:
+    image: account-old-img:latest
+    ports:
+      - "8079:8080"
+    environment:
+      DB_HOST: db
+      DB_NAME: account
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    networks:
+      - account-old-network
+    depends_on:
+      - db
+      - pgadmin
+volumes:
+  account_old_data:
+networks:
+  account-old-network:
+    driver: bridge

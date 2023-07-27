@@ -1,0 +1,6 @@
+#!/bin/bash
+./make
+docker pull account-old-img:latest
+docker-compose down
+docker-compose up
+docker-compose down

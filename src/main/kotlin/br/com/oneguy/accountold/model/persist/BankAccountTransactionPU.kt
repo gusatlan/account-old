@@ -21,6 +21,24 @@ class BankAccountTransactionPU(
     val account: BankAccountPU
 ) : Comparable<BankAccountTransactionPU> {
 
+    private var createdAt = LocalDateTime.now()
+        @Column(name = "created_at")
+        get
+
+    private var updatedAt = LocalDateTime.now()
+        @Column(name = "updated_at")
+        get
+
+    @PreUpdate
+    private fun updateTrigger() {
+        updatedAt = LocalDateTime.now()
+    }
+
+    @PrePersist
+    private fun createTrigger() {
+        createdAt = LocalDateTime.now()
+    }
+
     fun computeValue(): BigDecimal {
         return when (type) {
             BankAccountTransactionEnum.DEPOSIT -> value.abs()

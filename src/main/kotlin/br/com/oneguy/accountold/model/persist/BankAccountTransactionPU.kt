@@ -22,11 +22,11 @@ class BankAccountTransactionPU(
 ) : Comparable<BankAccountTransactionPU> {
 
     private var createdAt = LocalDateTime.now()
-        @Column(name = "created_at")
+        @Column(name = "created_at", nullable = false)
         get
 
     private var updatedAt = LocalDateTime.now()
-        @Column(name = "updated_at")
+        @Column(name = "updated_at", nullable = false)
         get
 
     @PreUpdate
@@ -37,6 +37,7 @@ class BankAccountTransactionPU(
     @PrePersist
     private fun createTrigger() {
         createdAt = LocalDateTime.now()
+        updatedAt = LocalDateTime.now()
     }
 
     fun computeValue(): BigDecimal {
